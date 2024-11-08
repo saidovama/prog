@@ -1,0 +1,8 @@
+import math
+a=int(input('Введите сторону трапеции:'))
+b=int(input('Введите сторону трапеции:'))
+c=int(input('Введите сторону трапеции:'))
+d=int(input('Введите сторону трапеции:'))
+p=(a+b+c+d)/2
+S=math.sqrt((p-a)*(p-b)*(p-c)*(p-d))
+print(S)
