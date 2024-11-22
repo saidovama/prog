@@ -1,0 +1,17 @@
+#include<stdio.h>
+
+int main() {
+    int n;
+    printf("Введите возраст:");
+    scanf("%d", &n);
+    if (n>0) {
+    switch (n){
+    case 0 ... 17: printf ("детсво и юность"); break;
+    case 18 ... 60: printf ("зрелость"); break;
+    default:
+    printf ("пожилой возраст"); break;
+    } 
+    }
+       else printf("ошибка");
+    return 0;
+}
