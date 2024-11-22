@@ -1,0 +1,17 @@
+a=int(input('Введите число недели:'))
+match a:
+  case 1:
+    print("4:00")
+  case 2:
+    print("1:30")
+  case 3:
+    print("2:40")
+  case 4:
+    print("4:00")
+  case 5:
+    print("2:40")
+  case 6:
+    print("2:40")
+  case 7:
+    print("0")
+  
