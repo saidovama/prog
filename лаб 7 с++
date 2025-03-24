@@ -1,0 +1,42 @@
+#include <iostream>
+#include <stdexcept>
+
+std::pair<double, double> calculate_speeds(double V_avg, double S, double t1) {
+    if (V_avg <= 0 || S <= 0 || t1 <= 0 || 2 * S / V_avg <= t1) {
+        std::cout << "Ошибка: Некорректные входные данные." << std::endl;
+        return {0, 0}; // Return a pair of zeros to indicate an error
+    }
+
+    double V1 = S / t1;
+    double t2 = (2 * S / V_avg) - t1; // Время движения из Б в A
+    double V2 = S / t2;
+    return {V1, V2};
+}
+
+int main() {
+    double V_avg, S, t1;
+
+    try {
+        std::cout << "Введите среднюю скорость движения (V): ";
+        std::cin >> V_avg;
+        std::cout << "Введите расстояние между пунктами A и B (S): ";
+        std::cin >> S;
+        std::cout << "Введите время движения из A в B (t): ";
+        std::cin >> t1;
+
+        // Вычисление и вывод скоростей
+        auto speeds = calculate_speeds(V_avg, S, t1);
+        double V1 = speeds.first;
+        double V2 = speeds.second;
+
+        if (V1 != 0 && V2 != 0) {
+            std::cout << "Скорость из A в B (V1): " << V1 << std::endl;
+            std::cout << "Скорость из B в A (V2): " << V2 << std::endl;
+        }
+
+    } catch (const std::invalid_argument&) {
+        std::cout << "Ошибка: Введите числовые значения." << std::endl;
+    }
+
+    return 0;
+}
