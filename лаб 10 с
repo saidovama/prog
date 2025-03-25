@@ -1,0 +1,22 @@
+#include <iostream>
+#include <cmath>
+
+const double G = 6.672e-11;  // Нм²/кг²
+const double M = 5.96e24;    // кг
+const double R = 6.37e6;     // м
+
+double calculate_g(double h) {
+    return (G * M) / pow((R + h), 2);
+}
+
+int main() {
+    double h;
+
+    std::cout << "Введите высоту h над поверхностью Земли (в метрах): ";
+    std::cin >> h;
+
+    double g = calculate_g(h);
+    std::cout << "Ускорение свободного падения g на высоте " << h << " м: " << g << " м/с²" << std::endl;
+
+    return 0;
+}
