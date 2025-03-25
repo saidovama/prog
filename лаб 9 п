@@ -1,0 +1,12 @@
+import math
+
+def calculate_T(omega, k):
+    phi_0 = math.asin(1 / k)
+    T = (math.pi / 2 - phi_0) / omega
+    return T
+
+omega = float(input("Введите частоту (omega): "))
+k = float(input("Введите значение k: "))
+
+T = calculate_T(omega, k)
+print(f"Время T, когда отклонение маятника максимально: {T:.4f} секунд")
