@@ -1,0 +1,28 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+    double H, L, g = 9.81;
+
+    // Ввод данных
+    cout << "Введите максимальную высоту подъема (H): ";
+    cin >> H;
+    cout << "Введите дальность полета (L): ";
+    cin >> L;
+
+    // Вычисление угла α
+    double tan_alpha = (4 * H) / L;
+    double alpha = atan(tan_alpha);  // Вычисляем угол в радианах
+    double alpha_degrees = alpha * 180 / M_PI;  // Переводим в градусы
+
+    // Вычисление начальной скорости V
+    double V = sqrt((g * L) / sin(2 * alpha));
+
+    // Вывод результата
+    cout << "Угол α (в радианах): " << alpha << endl;
+    cout << "Угол α (в градусах): " << alpha_degrees << endl;
+    cout << "Начальная скорость V: " << V << " м/с" << endl;
+
+    return 0;
+}
