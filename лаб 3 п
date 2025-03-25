@@ -1,0 +1,18 @@
+import math
+
+# Ввод данных
+H = float(input("Введите максимальную высоту подъема (H): "))
+L = float(input("Введите дальность полета (L): "))
+g = 9.81  # Ускорение свободного падения
+
+# Вычисление угла α
+tan_alpha = (4 * H) / L
+alpha = math.atan(tan_alpha)  # Вычисляем угол в радианах
+alpha_degrees = math.degrees(alpha)  # Переводим в градусы
+
+# Вычисление начальной скорости V
+V = math.sqrt((g * L) / math.sin(2 * alpha))
+
+# Вывод результата
+print(f"Угол α (в радианах): {alpha:.2f}")
+print(f"Угол α (в градусах): {alpha_degrees:.2f}")
