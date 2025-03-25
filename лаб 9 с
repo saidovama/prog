@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+double calculate_T(double omega, double k) {
+    double phi_0 = asin(1.0 / k);
+    double T = (M_PI / 2.0 - phi_0) / omega;
+    return T;
+}
+
+int main() {
+    double omega, k;
+
+    // Ввод параметров
+    cout << "Введите частоту (omega): ";
+    cin >> omega;
+
+    cout << "Введите значение k: ";
+    cin >> k;
+
+    // Проверка корректности входных данных
+    if (k <= 1.0) {
+        cerr << "Ошибка: k должно быть больше 1." << endl;
+        return 1; // Выход с кодом ошибки
+    }
+    if (omega <= 0.0) {
+        cerr << "Ошибка: omega должно быть больше 0." << endl;
+        return 1; // Выход с кодом ошибки
+    }
+
+    // Вычисление времени T
+    double T = calculate_T(omega, k);
+
+    // Вывод результата с форматированием
+    cout << "Время T, когда отклонение маятника максимально: " << fixed << setprecision(4) << T << " секунд" << endl;
+
+    return 0;
+}
