@@ -1,0 +1,25 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+    double V, T, g = 9.81;
+
+    // Ввод данных
+    cout << "Введите начальную скорость (V): ";
+    cin >> V;
+    cout << "Введите время полета (T): ";
+    cin >> T;
+
+    // Вычисление угла
+    double a = asin((g * T) / (2 * V));
+
+    // Перевод угла из радиан в градусы
+    double a_degrees = a * 180 / M_PI;
+
+    // Вывод результата
+    cout << "Угол α (в радианах): " << a << endl;
+    cout << "Угол α (в градусах): " << a_degrees << endl;
+
+    return 0;
+}
