@@ -1,24 +1,69 @@
+
 #include <iostream>
 #include <cmath>
+#include <iomanip>
+
 using namespace std;
 
+// Функция для вычисления дальности полета
+double calculate_range(double V, double a) {
+    const double g = 9.81;  // Ускорение свободного падения (м/с²)
+    return (V * V * sin(2 * a)) / g;
+}
+
+// Функция для метода Ньютона (нахождение угла для заданной дальности)
+double newton_method(double V, double L, double initial_guess, double tolerance = 1e-6, int max_iter = 100) {
+    const double g = 9.81;
+    double a = initial_guess;
+    
+    for (int i = 0; i < max_iter; ++i) {
+        double f = (V * V * sin(2 * a)) / g - L;
+        double df = (2 * V * V * cos(2 * a)) / g;  // Производная
+        
+        double delta = f / df;
+        a -= delta;
+        
+        if (abs(delta) < tolerance) {
+            return a;
+        }
+    }
+    
+    throw runtime_error("Метод Ньютона не сошелся за указанное число итераций");
+}
+
 int main() {
-    double V, alpha, g = 9.81;
-
-    // Ввод данных
-    cout << "Введите начальную скорость (V): ";
-    cin >> V;
-    cout << "Введите угол α (в градусах): ";
-    cin >> alpha;
-
-    // Перевод угла из градусов в радианы
-    double alpha_radians = alpha * M_PI / 180;
-
-    // Вычисление дальности полета L
-    double L = (pow(V, 2) * sin(2 * alpha_radians) / g;
-
-    // Вывод результата
-    cout << "Дальность полета L: " << L << " м" << endl;
-
+    try {
+        double V, L;
+        
+        // Ввод данных
+        cout << "Введите начальную скорость V (м/с): ";
+        cin >> V;
+        cout << "Введите желаемую дальность полета L (м): ";
+        cin >> L;
+        
+        // Проверка на максимально возможную дальность
+        double max_L = (V * V) / 9.81;
+        if (L > max_L) {
+            cout << "Ошибка: Невозможно достичь дальности " << L << " м при скорости " << V << " м/с" << endl;
+            cout << "Максимальная возможная дальность: " << max_L << " м" << endl;
+            return 1;
+        }
+        
+        // Начальное приближение (45 градусов в радианах)
+        double initial_guess = M_PI / 4.0;
+        double a = newton_method(V, L, initial_guess);
+        
+        // Вывод результатов
+        cout << fixed << setprecision(6);
+        cout << "\nРезультаты расчета:\n";
+        cout << "Угол броска (радианы): " << a << endl;
+        cout << "Угол броска (градусы): " << a * 180.0 / M_PI << endl;
+        cout << "Рассчитанная дальность: " << calculate_range(V, a) << " м" << endl;
+        
+    } catch (const exception& e) {
+        cerr << "Ошибка: " << e.what() << endl;
+        return 1;
+    }
+    
     return 0;
 }
