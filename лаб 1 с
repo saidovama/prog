@@ -1,25 +1,48 @@
 #include <iostream>
 #include <cmath>
+#include <iomanip>
+
 using namespace std;
 
+double calculate_angle(double V, double T, double epsilon = 1e-6, int max_iter = 100) {
+    const double g = 9.81;
+    double target = (g * T) / (2 * V);
+    
+    // Проверка физической корректности
+    if (target > 1.0 || target < -1.0) {
+        throw runtime_error("Невозможно достичь заданной дальности при данных параметрах");
+    }
+    
+    double alpha = 0.0;  // Начальное приближение
+    for (int i = 0; i < max_iter; ++i) {
+        double new_alpha = asin(target);
+        if (fabs(new_alpha - alpha) < epsilon) {
+            return new_alpha;
+        }
+        alpha = new_alpha;
+    }
+    throw runtime_error("Метод не сошелся за указанное число итераций");
+}
+
 int main() {
-    double V, T, g = 9.81;
-
-    // Ввод данных
-    cout << "Введите начальную скорость (V): ";
-    cin >> V;
-    cout << "Введите время полета (T): ";
-    cin >> T;
-
-    // Вычисление угла
-    double a = asin((g * T) / (2 * V));
-
-    // Перевод угла из радиан в градусы
-    double a_degrees = a * 180 / M_PI;
-
-    // Вывод результата
-    cout << "Угол α (в радианах): " << a << endl;
-    cout << "Угол α (в градусах): " << a_degrees << endl;
-
+    try {
+        double V, T;
+        
+        cout << "Введите начальную скорость V (м/с): ";
+        cin >> V;
+        cout << "Введите время полета T (с): ";
+        cin >> T;
+        
+        double alpha_rad = calculate_angle(V, T);
+        double alpha_deg = alpha_rad * 180.0 / M_PI;
+        
+        cout << fixed << setprecision(4);
+        cout << "Угол α (радианы): " << alpha_rad << endl;
+        cout << "Угол α (градусы): " << alpha_deg << endl;
+        
+    } catch (const exception& e) {
+        cerr << "Ошибка: " << e.what() << endl;
+        return 1;
+    }
     return 0;
 }
