@@ -8,12 +8,12 @@ double calculate_angle(double V, double T, double epsilon = 1e-6, int max_iter =
     const double g = 9.81;
     double target = (g * T) / (2 * V);
     
-    // Проверка физической корректности
+    
     if (target > 1.0 || target < -1.0) {
         throw runtime_error("Невозможно достичь заданной дальности при данных параметрах");
     }
     
-    double alpha = 0.0;  // Начальное приближение
+    double alpha = 0.0; 
     for (int i = 0; i < max_iter; ++i) {
         double new_alpha = asin(target);
         if (fabs(new_alpha - alpha) < epsilon) {
@@ -25,7 +25,7 @@ double calculate_angle(double V, double T, double epsilon = 1e-6, int max_iter =
 }
 
 int main() {
-    try {
+
         double V, T;
         
         cout << "Введите начальную скорость V (м/с): ";
@@ -39,10 +39,6 @@ int main() {
         cout << fixed << setprecision(4);
         cout << "Угол α (радианы): " << alpha_rad << endl;
         cout << "Угол α (градусы): " << alpha_deg << endl;
-        
-    } catch (const exception& e) {
-        cerr << "Ошибка: " << e.what() << endl;
-        return 1;
-    }
+    
     return 0;
 }
