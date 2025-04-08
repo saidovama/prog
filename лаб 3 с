@@ -1,28 +1,60 @@
-#include <iostream>
+ #include <iostream>
 #include <cmath>
+#include <iomanip>
+
 using namespace std;
 
+// Функция для вычисления угла alpha методом итерации
+double compute_angle(double H, double L, double epsilon = 1e-6, int max_iter = 100) {
+    double alpha = 0.5; // Начальное приближение (в радианах)
+    
+    for (int i = 0; i < max_iter; ++i) {
+        double new_alpha = atan(4 * H / L);
+        
+        if (abs(new_alpha - alpha) < epsilon) {
+            return new_alpha;
+        }
+        
+        alpha = new_alpha;
+    }
+    
+    throw runtime_error("Метод итерации не сошелся за указанное число итераций");
+}
+
+// Функция для вычисления начальной скорости V
+double compute_velocity(double alpha, double L) {
+    const double g = 9.81;
+    return sqrt((g * L) / sin(2 * alpha));
+}
+
 int main() {
-    double H, L, g = 9.81;
-
-    // Ввод данных
-    cout << "Введите максимальную высоту подъема (H): ";
-    cin >> H;
-    cout << "Введите дальность полета (L): ";
-    cin >> L;
-
-    // Вычисление угла α
-    double tan_alpha = (4 * H) / L;
-    double alpha = atan(tan_alpha);  // Вычисляем угол в радианах
-    double alpha_degrees = alpha * 180 / M_PI;  // Переводим в градусы
-
-    // Вычисление начальной скорости V
-    double V = sqrt((g * L) / sin(2 * alpha));
-
-    // Вывод результата
-    cout << "Угол α (в радианах): " << alpha << endl;
-    cout << "Угол α (в градусах): " << alpha_degrees << endl;
-    cout << "Начальная скорость V: " << V << " м/с" << endl;
-
+    try {
+        double H, L;
+        
+        // Ввод данных
+        cout << "Введите максимальную высоту подъема H (м): ";
+        cin >> H;
+        cout << "Введите дальность полета L (м): ";
+        cin >> L;
+        
+        // Вычисление угла alpha
+        double alpha = compute_angle(H, L);
+        double alpha_deg = alpha * 180.0 / M_PI;
+        
+        // Вычисление начальной скорости V
+        double V = compute_velocity(alpha, L);
+        
+        // Вывод результатов
+        cout << fixed << setprecision(4);
+        cout << "\nРезультаты расчета:\n";
+        cout << "Угол броска α (радианы): " << alpha << endl;
+        cout << "Угол броска α (градусы): " << alpha_deg << endl;
+        cout << "Начальная скорость V (м/с): " << V << endl;
+        
+    } catch (const exception& e) {
+        cerr << "Ошибка: " << e.what() << endl;
+        return 1;
+    }
+    
     return 0;
 }
