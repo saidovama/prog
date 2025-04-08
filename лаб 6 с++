@@ -1,76 +1,48 @@
-#include <iostream> // 6 задача
+#include <iostream>  // 5 задач
 #include <cmath>
 #include <iomanip>
+#include <stdexcept>
 
 using namespace std;
 
-double calculate_total_time(double V, double U, double S) {
-    double t1 = S / (V + U);
-    double t2 = S / (V - U);
-    return t1 + t2;
+const double g = 9.81;
+
+
+double calculate_fall_time(double H) {
+    return sqrt(2 * H / g);
 }
 
-double secant_method_example(double x) {
-    return x * x - 2;
-}
-
-void demonstrate_secant_method() {
-    cout << "\nДемонстрация метода секущих (нахождение корня x^2 - 2 = 0):\n";
-
-    double x0 = 1.0;
-    double x1 = 2.0; 
-    double epsilon = 1e-6;
-    int max_iter = 100;
-
-    for (int i = 0; i < max_iter; ++i) {
-        double f_x0 = secant_method_example(x0);
-        double f_x1 = secant_method_example(x1);
-
-        if (abs(f_x1) < epsilon) {
-            cout << "Найден корень: " << x1 << " (итераций: " << i + 1 << ")\n";
-            return;
-        }
-
-        if (f_x1 - f_x0 == 0) {
-            cout << "Деление на ноль. Метод не может продолжаться.\n";
-            return;
-        }
-
-        double x2 = x1 - f_x1 * (x1 - x0) / (f_x1 - f_x0);
+double secant_method(double (*f)(double), double x0, double x1, double tol) {
+    double x2;
+    for (int i = 0; i < 100; ++i) {
+        if (fabs(f(x1)) < tol) return x1;
+        if (fabs(x1 - x0) < tol) return x1;
+        
+        x2 = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0));
         x0 = x1;
         x1 = x2;
     }
-
-    cout << "Метод не сошелся за " << max_iter << " итераций.\n";
 }
-
 
 int main() {
-    double V, U, S;
-
-    cout << "Введите скорость лодки в стоячей воде V (км/ч): ";
-    cin >> V;
-    cout << "Введите скорость течения реки U (км/ч): ";
-    cin >> U;
-    cout << "Введите расстояние между пунктами S (км): ";
-    cin >> S;
-
-    if (V <= 0 || U < 0 || S <= 0) {
-        cout << "Ошибка: скорости и расстояние должны быть положительными.\n";
-        return 1;
-    }
-
-    if (U >= V) {
-        cout << "Ошибка: скорость течения не может быть больше или равна скорости лодки.\n";
-        return 1;
-    }
-
-    double total_time = calculate_total_time(V, U, S);
-
-    cout << "\nРезультаты расчета:\n";
-    cout << "Время движения по течению: " << S / (V + U) << " ч\n";
-    cout << "Время движения против течения: " << S / (V - U) << " ч\n";
-    cout << "Общее время движения: " << total_time << " ч\n";
-
-    return 0;
-}
+        double H, U;
+        
+    
+        cout << "Введите высоту полета H (м): ";
+        cin >> H;
+        cout << "Введите скорость самолета U (м/с): ";
+        cin >> U;
+        
+        if (H <= 0 || U <= 0) {
+            throw invalid_argument("Высота и скорость должны быть положительными");
+        }
+        
+        double T = calculate_fall_time(H);
+        
+        double S = U * T;
+        
+        cout << "\nРезультаты расчета:\n";
+        cout << "Время падения бомбы T (с): " << T << endl;
+        cout << "Подлетное расстояние S (м): " << S << endl;
+        
+    } 
