@@ -5,13 +5,11 @@
 
 using namespace std;
 
-// Функция для вычисления дальности полета
 double calculate_range(double V, double a) {
     const double g = 9.81;  // Ускорение свободного падения (м/с²)
     return (V * V * sin(2 * a)) / g;
 }
 
-// Функция для метода Ньютона (нахождение угла для заданной дальности)
 double newton_method(double V, double L, double initial_guess, double tolerance = 1e-6, int max_iter = 100) {
     const double g = 9.81;
     double a = initial_guess;
@@ -35,13 +33,12 @@ int main() {
     try {
         double V, L;
         
-        // Ввод данных
+        
         cout << "Введите начальную скорость V (м/с): ";
         cin >> V;
         cout << "Введите желаемую дальность полета L (м): ";
         cin >> L;
-        
-        // Проверка на максимально возможную дальность
+     
         double max_L = (V * V) / 9.81;
         if (L > max_L) {
             cout << "Ошибка: Невозможно достичь дальности " << L << " м при скорости " << V << " м/с" << endl;
@@ -49,11 +46,10 @@ int main() {
             return 1;
         }
         
-        // Начальное приближение (45 градусов в радианах)
+
         double initial_guess = M_PI / 4.0;
         double a = newton_method(V, L, initial_guess);
-        
-        // Вывод результатов
+
         cout << fixed << setprecision(6);
         cout << "\nРезультаты расчета:\n";
         cout << "Угол броска (радианы): " << a << endl;
