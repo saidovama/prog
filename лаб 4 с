@@ -1,34 +1,48 @@
-#include <iostream>
+#include <iostream> // 4 задача
 #include <cmath>
-#include <algorithm>  // Для функции max
+#include <iomanip>
+
 using namespace std;
 
-int main() {
-    double H, V, alpha, t, g = 9.81;
+const double g = 9.81;
 
-    // Ввод данных
-    cout << "Введите высоту обрыва (H): ";
-    cin >> H;
-    cout << "Введите начальную скорость (V): ";
-    cin >> V;
-    cout << "Введите угол α (в градусах): ";
-    cin >> alpha;
-    cout << "Введите время t: ";
-    cin >> t;
-
-    // Перевод угла из градусов в радианы
-    double alpha_radians = alpha * M_PI / 180;
-
-    // Вычисление координат камня в момент времени t
-    double x_t = V * t * cos(alpha_radians);
-    double y_t = H + V * t * sin(alpha_radians) - 0.5 * g * t * t;
-
-    // Проверка, упал ли камень на дно обрыва
-    y_t = max(y_t, 0.0);  // Если y_t < 0, то камень уже упал
-
-    // Вывод результата
-    cout << "Расстояние до края обрыва x(t): " << x_t << " м" << endl;
-    cout << "Высота от дна обрыва y(t): " << y_t << " м" << endl;
-
-    return 0;
+double compute_flight_time(double V, double a, double H, double epsilon = 1e-6) {
+    double T = (V * sin(a) + sqrt(pow(V * sin(a), 2) + 2 * g * H)) / g; 
+    double T_new;
+    
+    for (int i = 0; i < 100; ++i) {
+        T_new = (V * sin(a) + sqrt(pow(V * sin(a), 2) + 2 * g * H - 2 * g * (H + V * T * sin(a) - g * pow(T, 2) / 2))) / g;
+        
+        if (abs(T_new - T) < epsilon) {
+            return T_new;
+        }
+        
+        T = T_new;
+    }
+    
 }
+
+int main() {
+        double H, V, a_deg, t;
+        
+        cout << "Введите высоту обрыва H (м): ";
+        cin >> H;
+        cout << "Введите начальную скорость V (м/с): ";
+        cin >> V;
+        cout << "Введите угол броска a (градусы): ";
+        cin >> a_deg;
+        cout << "Введите время t (с): ";
+        cin >> t;
+   
+        double a = a_deg * M_PI / 180.0;
+        double T = compute_flight_time(V, a, H);
+        double x = V * t * cos(a);
+        double y = (t <= T) ? (H + V * t * sin(a) - 0.5 * g * pow(t, 2)) : 0.0;
+       
+        cout << "\nРезультаты расчета:\n";
+        cout << "Время полета T (с): " << T << endl;
+        cout << "Расстояние от края обрыва x(t) (м): " << x << endl;
+        cout << "Высота от дна обрыва y(t) (м): " << y << endl;
+        cout << "Состояние: " << ((t <= T) ? "Камень в полете" : "Камень упал на дно") << endl;
+        
+    }
