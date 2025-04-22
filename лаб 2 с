@@ -1,36 +1,31 @@
-
-#include <iostream>
+#include <iostream> // 2 задача
 #include <cmath>
 #include <iomanip>
 
 using namespace std;
 
 double calculate_range(double V, double a) {
-    const double g = 9.81;  // Ускорение свободного падения (м/с²)
+    const double g = 9.81; 
     return (V * V * sin(2 * a)) / g;
 }
 
-double newton_method(double V, double L, double initial_guess, double tolerance = 1e-6, int max_iter = 100) {
+double newton_method(double V, double L, double initial_guess, double epsilon = 1e-6, int max_iter = 100) {
     const double g = 9.81;
     double a = initial_guess;
     
     for (int i = 0; i < max_iter; ++i) {
         double f = (V * V * sin(2 * a)) / g - L;
-        double df = (2 * V * V * cos(2 * a)) / g;  // Производная
+        double df = (2 * V * V * cos(2 * a)) / g;  
         
         double delta = f / df;
         a -= delta;
         
-        if (abs(delta) < tolerance) {
+        if (abs(delta) < epsilon) {
             return a;
         }
     }
-    
-    throw runtime_error("Метод Ньютона не сошелся за указанное число итераций");
 }
-
 int main() {
-    try {
         double V, L;
         
         
@@ -50,16 +45,8 @@ int main() {
         double initial_guess = M_PI / 4.0;
         double a = newton_method(V, L, initial_guess);
 
-        cout << fixed << setprecision(6);
         cout << "\nРезультаты расчета:\n";
         cout << "Угол броска (радианы): " << a << endl;
         cout << "Угол броска (градусы): " << a * 180.0 / M_PI << endl;
         cout << "Рассчитанная дальность: " << calculate_range(V, a) << " м" << endl;
-        
-    } catch (const exception& e) {
-        cerr << "Ошибка: " << e.what() << endl;
-        return 1;
-    }
-    
-    return 0;
 }
