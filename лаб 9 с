@@ -1,40 +1,59 @@
-#include <iostream>
+#include <iostream> // 9 задача метод хорд
 #include <cmath>
 #include <iomanip>
 
 using namespace std;
 
-double calculate_T(double omega, double k) {
-    double phi_0 = asin(1.0 / k);
-    double T = (M_PI / 2.0 - phi_0) / omega;
-    return T;
+double f(double T, double omega, double phi0) {
+    return sin(omega * T + phi0) - 1;
+}
+
+// Метод хорд для нахождения T
+double find_T_chord(double omega, double k, double epsilon = 1e-6, int max_iter = 100) {
+    double phi0 = asin(1.0 / k); 
+
+    double T0 = 0.0;
+    double T1 = (M_PI / 2.0 - phi0) / omega; 
+
+    double T_next;
+    for (int i = 0; i < max_iter; ++i) {
+        T_next = T1 - f(T1, omega, phi0) * (T1 - T0) / (f(T1, omega, phi0) - f(T0, omega, phi0));
+
+        if (abs(T_next - T1) < epsilon) {
+            return T_next;
+        }
+
+        T0 = T1;
+        T1 = T_next;
+    }
+
+    cerr << "Предупреждение: Метод не сошелся за " << max_iter << " итераций." << endl;
+    return T1;
 }
 
 int main() {
     double omega, k;
 
-    // Ввод параметров
-    cout << "Введите частоту (omega): ";
+    cout << "Введите частоту omega: ";
     cin >> omega;
 
     cout << "Введите значение k: ";
     cin >> k;
 
-    // Проверка корректности входных данных
     if (k <= 1.0) {
         cerr << "Ошибка: k должно быть больше 1." << endl;
-        return 1; // Выход с кодом ошибки
+        return 1;
     }
+
     if (omega <= 0.0) {
         cerr << "Ошибка: omega должно быть больше 0." << endl;
-        return 1; // Выход с кодом ошибки
+        return 1;
     }
 
-    // Вычисление времени T
-    double T = calculate_T(omega, k);
+    double T = find_T_chord(omega, k);
 
-    // Вывод результата с форматированием
-    cout << "Время T, когда отклонение маятника максимально: " << fixed << setprecision(4) << T << " секунд" << endl;
+    cout << "Момент времени T, когда отклонение максимально: " 
+          << T << " секунд" << endl;
 
     return 0;
 }
