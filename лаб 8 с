@@ -1,28 +1,65 @@
+// 8 задача
 #include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+const double EPSILON = 1e-6; 
+
+
+void calculate_path(double V, double t, double &S1, double &S2) {
+    double S1_uniform = V * t;              
+    double a = V / t;                       
+    double S2_decelerated = a * t * t / 2.0; 
+    S1 = S1_uniform + S2_decelerated;
+    
+    S2 = 3.0 * V * t / 2.0;
+}
+
+void compare_results_iteratively(double V, double t) {
+    double S_prev = 0.0;
+    double S_current = V * t; 
+    
+    for (int i = 0; i < 100; ++i) {
+        double a = V / t;
+        S_prev = S_current;
+        S_current = V * t + (a * t * t / 2.0);
+        
+        if (fabs(S_current - S_prev) < EPSILON) {
+            cout << "Метод итерации сошелся за " << i+1 << " итераций\n";
+            cout << "Уточненное значение пути: " << S_current << " м\n";
+            return;
+        }
+    }
+    
+    cout << "Метод итерации не достиг требуемой точности\n";
+}
 
 int main() {
     double V, t;
-
-    std::cout << "Введите скорость поезда V (м/с): ";
-    std::cin >> V;
-    std::cout << "Введите время t (с): ";
-    std::cin >> t;
-
-    // Расчет пути S1 (равномерное движение)
-    double S1 = V * t;
-
-    // Расчет пути S2 (равнозамедленное движение до полной остановки)
-    // S2 = (V_начальная * t) / 2; 
-    double S2 = (V * t) / 2.0;
-
-    // Общий путь
-    double S = S1 + S2;
-
-    // Сравнительный путь (для проверки)
-    double S_compare = (3.0 * V * t) / 2.0;
-
-    std::cout << "Общий путь S: " << S << " м" << std::endl;
-    std::cout << "Сравнительный путь S (для проверки): " << S_compare << " м" << std::endl;
-
+    
+    cout << "Введите скорость поезда V (м/с): ";
+    cin >> V;
+    cout << "Введите время движения t (с): ";
+    cin >> t;
+    
+    if (V <= 0 || t <= 0) {
+        cout << "Ошибка: скорость и время должны быть положительными.\n";
+        return 1;
+    }
+    
+    double S1, S2;
+    calculate_path(V, t, S1, S2);
+    
+    cout << "\nРезультаты расчета:\n";
+    cout << "Путь по формуле S = S1 + S2: " << S1 << " м\n";
+    cout << "Путь по формуле S = 3Vt/2:   " << S2 << " м\n";
+    cout << "Разница между методами:      " << fabs(S1 - S2) << " м\n";
+    
+    // Демонстрация метода итерации
+    cout << "\nСравнение методом итерации:\n";
+    compare_results_iteratively(V, t);
+    
     return 0;
 }
