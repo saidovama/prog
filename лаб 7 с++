@@ -1,42 +1,61 @@
-#include <iostream>
-#include <stdexcept>
+#include <iostream> // 7 задача
+#include <cmath>
+#include <iomanip>
 
-std::pair<double, double> calculate_speeds(double V_avg, double S, double t1) {
-    if (V_avg <= 0 || S <= 0 || t1 <= 0 || 2 * S / V_avg <= t1) {
-        std::cout << "Ошибка: Некорректные входные данные." << std::endl;
-        return {0, 0}; // Return a pair of zeros to indicate an error
-    }
-
-    double V1 = S / t1;
-    double t2 = (2 * S / V_avg) - t1; // Время движения из Б в A
-    double V2 = S / t2;
-    return {V1, V2};
-}
+using namespace std;
 
 int main() {
-    double V_avg, S, t1;
-
-    try {
-        std::cout << "Введите среднюю скорость движения (V): ";
-        std::cin >> V_avg;
-        std::cout << "Введите расстояние между пунктами A и B (S): ";
-        std::cin >> S;
-        std::cout << "Введите время движения из A в B (t): ";
-        std::cin >> t1;
-
-        // Вычисление и вывод скоростей
-        auto speeds = calculate_speeds(V_avg, S, t1);
-        double V1 = speeds.first;
-        double V2 = speeds.second;
-
-        if (V1 != 0 && V2 != 0) {
-            std::cout << "Скорость из A в B (V1): " << V1 << std::endl;
-            std::cout << "Скорость из B в A (V2): " << V2 << std::endl;
-        }
-
-    } catch (const std::invalid_argument&) {
-        std::cout << "Ошибка: Введите числовые значения." << std::endl;
+    double V_avg, S, t_AB;
+    
+    cout << "Введите среднюю скорость V (км/ч): ";
+    cin >> V_avg;
+    cout << "Введите расстояние между пунктами S (км): ";
+    cin >> S;
+    cout << "Введите время движения из A в B t_AB (ч): ";
+    cin >> t_AB;
+    
+    if (V_avg <= 0  S <= 0  t_AB <= 0) {
+        cout << "Ошибка: все параметры должны быть положительными.\n";
+        return 1;
     }
-
+    
+    double V1 = S / t_AB; 
+    double V2 = S / (2*S/V_avg - t_AB); 
+    if (2*S/V_avg - t_AB <= 0) {
+        cout << "Ошибка: невозможно рассчитать V2 с заданными параметрами.\n";
+        return 1;
+    }
+    
+   
+    cout << "\nРезультаты расчета:\n";
+    cout << "Скорость из A в B (V1): " << V1 << " км/ч\n";
+    cout << "Скорость из B в A (V2): " << V2 << " км/ч\n";
+    
+    cout << "\nДемонстрация метода Ньютона (решение x^2 - 2 = 0):\n";
+    double x = 1.0;  // Начальное приближение
+    double epsilon = 1e-6;
+    int max_iter = 100;
+    
+    for (int i = 0; i < max_iter; ++i) {
+        double fx = x*x - 2;
+        double dfx = 2*x;
+        
+        if (abs(fx) < epsilon) {
+            cout << "Найден корень: " << x << " (итераций: " << i+1 << ")\n";
+            break;
+        }
+        
+        if (dfx == 0) {
+            cout << "Производная равна нулю. Метод не может продолжаться.\n";
+            break;
+        }
+        
+        x = x - fx/dfx;
+        
+        if (i == max_iter-1) {
+            cout << "Метод не сошелся за " << max_iter << " итераций.\n";
+        }
+    }
+    
     return 0;
 }
