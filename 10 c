@@ -1,0 +1,46 @@
+#include <iostream> // метод итераций 10
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+const double G = 6.672e-11;  
+const double M = 5.96e24;   
+const double R = 6.37e6;      
+
+double calculate_g_iterative(double h, double epsilon = 1e-6, int max_iterations = 100) {
+    double g_prev = 0.0;
+    double g_next;
+
+    for (int i = 0; i < max_iterations; ++i) {
+        g_next = G * M / pow(R + h, 2); 
+        
+        if (abs(g_next - g_prev) < epsilon) {
+            return g_next;
+        }
+
+        g_prev = g_next;
+    }
+
+    cerr << "Предупреждение: Достигнуто максимальное число итераций." << endl;
+    return g_prev;
+}
+
+int main() {
+    double h;
+
+    cout << "Введите высоту h над поверхностью Земли (в метрах): ";
+    cin >> h;
+
+    if (h < 0) {
+        cerr << "Ошибка: высота не может быть отрицательной." << endl;
+        return 1;
+    }
+
+    double g = calculate_g_iterative(h);
+
+    cout << "Ускорение свободного падения на высоте " << h << " м: " 
+        << g << " м/с²" << endl;
+
+    return 0;
+}
