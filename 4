@@ -1,0 +1,90 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <functional>
+
+using namespace std;
+
+// Функция для вычисления интеграла методом Симпсона
+double simpson_integral(function<double(double)> f, double a, double b, int n = 10000) {
+    if (n % 2 != 0) n++; // Делаем n четным
+    
+    double h = (b - a) / n;
+    double sum = f(a) + f(b);
+    
+    for (int i = 1; i < n; i++) {
+        double x = a + i * h;
+        sum += (i % 2 == 0) ? 2 * f(x) : 4 * f(x);
+    }
+    
+    return (h / 3) * sum;
+}
+
+int main() {
+    const double inf_approx = 1000.0; // Приближение бесконечности
+    const double eps = 1e-12; // Малое число для избегания особых точек
+
+    cout << fixed << setprecision(9);
+
+    // 1) ∫[0,1] x^(2n) * ln(x) dx
+    int n = 1; // Можно изменить значение n
+    auto f1 = [n](double x) { 
+        return (x == 0) ? 0.0 : pow(x, 2*n) * log(x); 
+    };
+    cout << "1) ∫[0,1] x^" << 2*n << " * ln(x) dx ≈ " 
+         << simpson_integral(f1, eps, 1.0) << endl;
+    cout << "   Точное значение: " << -1.0/((2*n+1)*(2*n+1)) << endl;
+
+    // 2) ∫[0,∞] e^(-x) * sin(2x) dx
+    auto f2 = [](double x) { return exp(-x) * sin(2*x); };
+    cout << "2) ∫[0,∞] e^(-x)*sin(2x) dx ≈ " 
+         << simpson_integral(f2, 0, inf_approx) << endl;
+    cout << "   Точное значение: " << 2.0/5.0 << endl;
+
+    // 3) ∫[0,∞] 1/x² * sin(1/x) dx
+    auto f3 = [](double x) { 
+        return (x < eps) ? 0.0 : (1.0/(x*x)) * sin(1.0/x); 
+    };
+    cout << "3) ∫[0,∞] 1/x² * sin(1/x) dx ≈ " 
+         << simpson_integral(f3, eps, inf_approx) << endl;
+
+    // 4) ∫[0,1] x² * e^(-x) dx
+    auto f4 = [](double x) { return x*x * exp(-x); };
+    cout << "4) ∫[0,1] x² * e^(-x) dx ≈ " 
+         << simpson_integral(f4, 0, 1.0) << endl;
+    cout << "   Точное значение: " << 2 - 5/exp(1) << endl;
+
+    // 5) ∫[0,1] 1/(x*sqrt(x²-2x-1)) dx - требует проверки сходимости
+    // Подынтегральная функция имеет особенности
+
+    // 6) ∫[0,∞] 1/((1+x)*sqrt(x)) dx
+    auto f6 = [](double x) { 
+        return (x < eps) ? 0.0 : 1.0/((1+x)*sqrt(x)); 
+    };
+    cout << "6) ∫[0,∞] 1/((1+x)*√x) dx ≈ " 
+         << simpson_integral(f6, eps, inf_approx) << endl;
+    cout << "   Точное значение: " << M_PI << endl;
+
+    // 7) ∫[0,1] x³/sqrt(4-x²) dx
+    auto f7 = [](double x) { return pow(x,3)/sqrt(4-x*x); };
+    cout << "7) ∫[0,1] x³/√(4-x²) dx ≈ " 
+         << simpson_integral(f7, 0, 1.0-eps) << endl;
+
+    // 8) ∫[0,∞] ln(x)/x² dx
+    auto f8 = [](double x) { 
+        return (x < eps) ? 0.0 : log(x)/(x*x); 
+    };
+    cout << "8) ∫[0,∞] ln(x)/x² dx ≈ " 
+         << simpson_integral(f8, eps, inf_approx) << endl;
+    cout << "   Точное значение: " << -1.0 << endl;
+
+    // 9) ∫[0,∞] e^(-a*x) * cosh(x) dx
+    double a = 1.0; // Можно изменить параметр a
+    auto f9 = [a](double x) { return exp(-a*x) * cosh(x); };
+    cout << "9) ∫[0,∞] e^(-" << a << "*x) * cosh(x) dx ≈ " 
+         << simpson_integral(f9, 0, inf_approx) << endl;
+
+    // 10) Интеграл требует уточнения пределов интегрирования
+
+    return 0;
+}
