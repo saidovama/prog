@@ -1,0 +1,84 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Вспомогательная функция для вычисления двойного факториала (2n+1)!!
+double double_factorial(int n) {
+    double result = 1.0;
+    for (int i = 1; i <= 2*n+1; i += 2) {
+        result *= i;
+    }
+    return result;
+}
+
+// Задача 17: ∑ [(-1)^n * 2^n * n! / (2n+1)!!] * x^n
+double series17(double x, int n_terms = 100) {
+    double sum = 0.0;
+    double term = 1.0; // для n=0: (-1)^0=1, 2^0=1, 0!=1, (1)!!=1
+    
+    for (int n = 0; n < n_terms; ++n) {
+        sum += term;
+        
+        // Вычисляем следующий член ряда
+        term *= (-1) * 2 * (n+1) * x / ((2*(n+1)+1) * (2*(n+1)-1));
+    }
+    return sum;
+}
+
+// Задача 18: ∑ [√(2n+3) / 3^(n+3)] * [x^(n+1) / (4n+1)]
+double series18(double x, int n_terms = 100) {
+    double sum = 0.0;
+    
+    for (int n = 0; n < n_terms; ++n) {
+        double numerator = sqrt(2*n + 3);
+        double denominator = pow(3, n+3) * (4*n + 1);
+        double term = numerator / denominator * pow(x, n+1);
+        sum += term;
+    }
+    return sum;
+}
+
+// Задача 19: ∑ (2^n * x^n) / n!
+double series19(double x, int n_terms = 100) {
+    double sum = 0.0;
+    double term = 1.0; // для n=0: 2^0=1, x^0=1, 0!=1
+    
+    for (int n = 1; n <= n_terms; ++n) {
+        sum += term;
+        term *= 2 * x / n;
+    }
+    return sum;
+}
+
+// Задача 20: ∑ (x+3)^n / (n * ln^4(n)), n начиная с 2
+double series20(double x, int n_terms = 100) {
+    double sum = 0.0;
+    
+    for (int n = 2; n < n_terms + 2; ++n) {
+        double ln_n = log(n);
+        double ln4_n = ln_n * ln_n * ln_n * ln_n;
+        double term = pow(x + 3, n) / (n * ln4_n);
+        sum += term;
+    }
+    return sum;
+}
+
+int main() {
+    double x;
+    int n_terms;
+    
+    cout << "Введите значение x: ";
+    cin >> x;
+    cout << "Введите количество слагаемых: ";
+    cin >> n_terms;
+    
+    cout << fixed << setprecision(10);
+    cout << "Результат ряда 17: " << series17(x, n_terms) << endl;
+    cout << "Результат ряда 18: " << series18(x, n_terms) << endl;
+    cout << "Результат ряда 19: " << series19(x, n_terms) << endl;
+    cout << "Результат ряда 20: " << series20(x, n_terms) << endl;
+    
+    return 0;
+}
