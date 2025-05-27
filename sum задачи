@@ -1,0 +1,75 @@
+#include <iostream>
+#include <cmath>
+
+double product2_1_1(double eps = 1e-6) {
+    double prod = 1.0;
+    int n = 3;
+    double term = 1.0 - 1.0 / (n * n);
+
+    while (std::abs(1 - term) > eps) {
+        prod *= term;
+        n++;
+        term = 1.0 - 1.0 / (n * n);
+    }
+
+    return prod;
+}
+
+int main() {
+    double res = product2_1_1();
+    std::cout << "Product: " << res << " (exact: 2/3 ≈ 0.666667)" << std::endl;
+    return 0;
+}
+
+
+
+#include <iostream>
+#include <cmath>
+
+double series3_1(double x, double eps = 1e-6) {
+    double sum = 0;
+    int n = 1;
+    double term = -1.0 / (sin(x) + 2); // n=1
+
+    while (std::abs(term) > eps) {
+        sum += term;
+        n++;
+        term = (n % 2 == 0 ? 1.0 : -1.0) / (sin(n * x) + 1 + n * n);
+    }
+
+    return sum;
+}
+
+int main() {
+    double x = 1.0; // Пример: x ∈ ℝ
+    double sum = series3_1(x);
+    std::cout << "Sum: " << sum << std::endl;
+    return 0;
+}
+
+#include <iostream>
+#include <cmath>
+
+double series4_1(double x, double eps = 1e-6) {
+    double sum = 0;
+    double term = 1.0 / (0 + 1); // n=0
+    int n = 0;
+
+    while (std::abs(term) > eps) {
+        sum += term;
+        n++;
+        term = std::pow(x + 8, n) / ((n + 1) * std::pow(6, n));
+    }
+
+    return sum;
+}
+
+int main() {
+    double x = -5.0; // Пример: x ∈ (-14, -2)
+    double sum = series4_1(x);
+    std::cout << "Sum: " << sum << std::endl;
+    return 0;
+}
+
+
+
