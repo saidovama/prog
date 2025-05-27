@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    // Задача 1
+    double sum1 = 0;
+    for (int i = 1; i <= 3; ++i) {
+        sum1 += (3.0 / pow(2, i - 1)) + (pow(-1, i - 1) / (2.0 * pow(3, i - 1)));
+    }
+
+    // Задача 2
+    int n = 10; // Можно изменить на нужное значение
+    double sum2 = 0;
+    for (int i = 1; i <= n; ++i) {
+        sum2 += (pow(2, i) + cos(i)) / pow(3, i);
+    }
+
+    // Задача 3
+    double sum3 = 0;
+    for (int i = 1; i <= 4; ++i) {
+        sum3 += (2.0 / pow(3, i - 1)) + (pow(-1, i) / (3.0 * pow(2, i)));
+    }
+
+    // Задача 4
+    double sum4 = 0;
+    for (int i = 1; i <= 10; ++i) {
+        double numerator = pow(2, i) + pow(-1, i) * pow(3, i - 1) - pow(4, i + 1);
+        sum4 += numerator / pow(12, i);
+    }
+
+    // Вывод результатов
+    std::cout << "Задача 1: " << sum1 << std::endl;
+    std::cout << "Задача 2: " << sum2 << std::endl;
+    std::cout << "Задача 3: " << sum3 << std::endl;
+    std::cout << "Задача 4: " << sum4 << std::endl;
+
+    return 0;
+}
