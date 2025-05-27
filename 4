@@ -1,70 +1,52 @@
-#include <iostream>
-#include <cmath>
-#include <iomanip>
+import math
 
-using namespace std;
+def sum1(precision):
+    total = 0.0
+    k = 1
+    while True:
+        term = (3.0 / (2 ** (k - 1))) + ((-1) ** (k - 1) / (2.0 * (3 ** (k - 1))))
+        total += term
+        if abs(term) < precision:
+            break
+        k += 1
+    return total
 
-// Функция для вычисления суммы ряда 1
-double sum1(double precision) {
-    double sum = 0.0;
-    double term;
-    int k = 1;
-    do {
-        term = (3.0 / pow(2, k-1)) + (pow(-1, k-1) / (2.0 * pow(3, k-1)));
-        sum += term;
-        k++;
-    } while (abs(term) >= precision);
-    return sum;
-}
+def sum2(precision):
+    total = 0.0
+    n = 0
+    while True:
+        term = (2 ** n + math.cos(math.pi * n)) / (3 ** n)
+        total += term
+        if abs(term) < precision:
+            break
+        n += 1
+    return total
 
-// Функция для вычисления суммы ряда 2
-double sum2(double precision) {
-    double sum = 0.0;
-    double term;
-    int n = 0;
-    do {
-        term = (pow(2, n) + cos(M_PI * n)) / pow(3, n);
-        sum += term;
-        n++;
-    } while (abs(term) >= precision);
-    return sum;
-}
+def sum3(precision):
+    total = 0.0
+    n = 1
+    while True:
+        term = (2.0 / (3 ** (n - 1))) + ((-1) ** n / (3.0 * (2 ** n)))
+        total += term
+        if abs(term) < precision:
+            break
+        n += 1
+    return total
 
-// Функция для вычисления суммы ряда 3
-double sum3(double precision) {
-    double sum = 0.0;
-    double term;
-    int n = 1;
-    do {
-        term = (2.0 / pow(3, n-1)) + (pow(-1, n) / (3.0 * pow(2, n)));
-        sum += term;
-        n++;
-    } while (abs(term) >= precision);
-    return sum;
-}
+def sum4(precision):
+    total = 0.0
+    n = 0
+    while True:
+        term = (2 ** n + ((-1) ** n) * (3 ** n)) / (5 ** n)
+        total += term
+        if abs(term) < precision:
+            break
+        n += 1
+    return total
 
-// Функция для вычисления суммы ряда 4
-double sum4(double precision) {
-    double sum = 0.0;
-    double term;
-    int n = 0;
-    do {
-        term = (pow(2, n) + pow(-1, n) * pow(3, n)) / pow(5, n);
-        sum += term;
-        n++;
-    } while (abs(term) >= precision);
-    return sum;
-}
+precision = 1e-6
 
-int main() {
-    const double precision = 1e-6;
-
-    cout << fixed << setprecision(7); // Выводим 7 знаков после запятой для наглядности
-
-    cout << "Сумма ряда 1: " << sum1(precision) << endl;
-    cout << "Сумма ряда 2: " << sum2(precision) << endl;
-    cout << "Сумма ряда 3: " << sum3(precision) << endl;
-    cout << "Сумма ряда 4: " << sum4(precision) << endl;
-
-    return 0;
-}
+print(f"Сумма ряда 1: {sum1(precision):.7f}")
+print(f"Сумма ряда 2: {sum2(precision):.7f}")
+print(f"Сумма ряда 3: {sum3(precision):.7f}")
+print(f"Сумма ряда 4: {sum4(precision):.7f}")
